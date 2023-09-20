@@ -1,13 +1,38 @@
-# Product Design 2
-This repository is for the archives to ProductDesign2
-# Integrantes del grupos  
+---
+<div align="center">
 
-Miguel Angel Sanchez  
+  
+### Diseño de producto 2 - 2023-II
+</div>
 
-Daniel Guatavita  
+---
+# Integrantes del grupo: 
+* Daniel Guatavita 
+* Juan Camilo Peña Espinosa
 
-Juan Camilo Peña  
+## Primer corte
+Documento del producto 
 
-Manuel Felipe Sánchez  
+### Capitulos del documento
+1. **Lluvia de ideas**
+2. **Analisis y filtrado de ideas, mejor modelaje del proyecto**
+3. **Desarrollo de las caractersiticas de las 2 ideas filtradas**
+4. **Seleccion de la idea principal**
+5. **Casos de uso y requerimientos**
+6. **Diagrama de bloques (electricos y mecanicos)**
+7. **Boceto mecanico del producto**
+8. **Actualizacion del diagrama de bloques**
+9. **Actualizacion del diagrama de arquitectura**
+10. **Diseño completo del circuito de alimentacion**
+11. **Tipo de bateria**
+12. **conclusiones**
 
+---
 
+<div align="center">
+
+Hecho con ❤️ por [Juan Peña](https://github.com/Xtrimber)
+
+</div>
+
+---
