@@ -25,7 +25,7 @@ Documento del producto
 9. **Actualizacion del diagrama de arquitectura**
 10. **Diseño completo del circuito de alimentacion**
 11. **Tipo de bateria**
-12. **conclusiones**
+12. **Conclusiones**
 
 ---
 
