@@ -12,9 +12,9 @@
 * Miguel Angel Sanchez
 
 ## Primer corte
-***Documento del producto*** 
-* Descarga el documento [[PDF]]https://github.com/Xtrimber/Product2Design/raw/master/Achivos_del_proyecto/Documento_final_diseño_de_producto_2.pdf)
-### Capitulos del documento
+Documento del producto
+  * Descarga el documento [[PDF]](https://github.com/Xtrimber/Product2Design/raw/master/Achivos_del_proyecto/Documento_final_diseño_de_producto_2.pdf)
+  ### Capitulos del documento
 1. **Lluvia de ideas**
 2. **Analisis y filtrado de ideas, mejor modelaje del proyecto**
 3. **Desarrollo de las caractersiticas de las 2 ideas filtradas**
