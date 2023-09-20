@@ -9,10 +9,11 @@
 # Integrantes del grupo: 
 * Daniel Guatavita 
 * Juan Camilo Peña Espinosa
+* Miguel Angel Sanchez
 
 ## Primer corte
-Documento del producto 
-  * Descargar documento [[PDF]](https://github.com/Xtrimber/raw/master/Achivos_del_proyecto/Documento_final_diseño_de_producto_2.pdf)
+***Documento del producto*** 
+* Descarga el documento [[PDF]]https://github.com/Xtrimber/Product2Design/raw/master/Achivos_del_proyecto/Documento_final_diseño_de_producto_2.pdf)
 ### Capitulos del documento
 1. **Lluvia de ideas**
 2. **Analisis y filtrado de ideas, mejor modelaje del proyecto**
