@@ -31,7 +31,7 @@ Documento del producto
 
 <div align="center">
 
-Hecho con ❤️ por [Juan Peña](https://github.com/Xtrimber)
+Hecho con ☘️ por [Juan Peña](https://github.com/Xtrimber)
 
 </div>
 
