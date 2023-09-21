@@ -10,6 +10,7 @@
 * Daniel Guatavita 
 * Juan Camilo Peña Espinosa
 * Miguel Angel Sanchez
+* Manuel Felipe Sanchez
 
 ## Primer corte
 Documento del producto
