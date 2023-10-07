@@ -25,9 +25,10 @@ Documento del producto
 7. **Boceto mecanico del producto**
 8. **Actualizacion del diagrama de bloques**
 9. **Actualizacion del diagrama de arquitectura**
-10. **Diseño completo del circuito de alimentacion**
-11. **Tipo de bateria**
-12. **Conclusiones**
+10. **Tipo de bateria**
+11. **Relacion de la base de datos**
+12. **Esquematico y PCB**
+13. **Conclusiones**
 
 ---
 
