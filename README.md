@@ -14,7 +14,7 @@
 
 ## Primer corte
 Documento del producto
-  * Descarga el documento [[PDF]](https://github.com/Xtrimber/Product2Design/raw/b4f07961bb4fccbf20f7690d67e3a24d1ee49693/Documento%20dise%C3%B1o%20de%20producto%202.pdf)
+  * Descarga el documento [[PDF]](https://github.com/Xtrimber/Product2Design/raw/38e59adff6d98fbe25be440298c1f977cd46d2fb/Documento%20producto%202.pdf)
   ### Capitulos del documento
 1. **Lluvia de ideas**
 2. **Analisis y filtrado de ideas, mejor modelaje del proyecto**
