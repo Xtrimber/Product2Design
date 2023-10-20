@@ -14,7 +14,7 @@
 
 ## Primer corte
 Documento del producto
-  * Descarga el documento [[PDF]](https://github.com/Xtrimber/Product2Design/raw/38e59adff6d98fbe25be440298c1f977cd46d2fb/Documento%20producto%202.pdf)
+  * Descarga el documento [[PDF]](https://github.com/Xtrimber/Product2Design/blob/0ac367ea59faabcd05db4894431b7d01b9857983/Documento%20producto%202.pdf)
   ### Capitulos del documento
 1. **Lluvia de ideas**
 2. **Analisis y filtrado de ideas, mejor modelaje del proyecto**
@@ -26,8 +26,8 @@ Documento del producto
 8. **Actualizacion del diagrama de bloques**
 9. **Actualizacion del diagrama de arquitectura**
 10. **Tipo de bateria**
-11. **Relacion de la base de datos**
-12. **Esquematico y PCB**
+11. **Relacion de la base de datos y Diagramas Funcionales, UML**
+12. **Esquematico y PCB (Gerbers)**
 13. **Conclusiones**
 
 ---
