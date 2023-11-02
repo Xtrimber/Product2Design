@@ -1,0 +1,14 @@
+-dos leds:
+  1) alertar cuando esta en peligro
+  2) encendido y sincronizacion
+-boton:
+ 1) el boton en primera estancia espara encendido prendera un led y el otro en diferencia de 1 segundo entre uno y el otro, cuando esten encendido los dos titilearan los dos al mismo tiempo asta que el usuario deje de precionar el boton
+2) si se mantiene precionado "tiempoParaEsclavo"(variable de tiempo) cantidad de tiempo se pone en modo sincronizado de esclavo y prende el led 1.
+ 3) si es presionado "tiempoParaMaestro"(variable de tiempo) cantidad de tiempo prende led 2 y se pone listo para sincronizar en modo maestro una vez se pone en modo maestro siempre sincronizara en modo maestro independiente de el tiempo que sea seleccionado
+ 4) si es presionado "tiempoParaApagado"(variable de tiempo) cantidad de tiempo el dispositivo se apagara y antes de apagarse prendera y apagara los dos leds con una diferencia de 1 segundo entre apagado y encendido, esto lo ara dos veces y despues se apagaran.
+ 5) la manera de salir del modo sincronizar del maestro ocurrira cuando el usuario oprima el boton "tiempoParaMaestro" cantidad de tiempo el dispositivo.
+ 6) la manera en que dejara de estar en modo sincronizar esclavo el dispositivo sera cuando resiva señal de respuesta del maestrode que ya fue sincronizado y el led 1 comensara a titilear 4 veces en intervalos de 1 segundo y despues se apagara
+- trasmicion de datos:
+ se utilizaran 2 modulos de transmicion de 433 mhz uno es transmisor y el otro es reseptor, estan conectados en tx y rx como correspondan. la transmicion de datos cra una variable llamada bandera de inicio que es la primera que se va a tranmitir para diferenciar el inicio dela transmicion otra variable que se llame nombre del dispositivo que es la que guarda el nombre del dispositivo que transmite, otra que se llame mensaje que es la que guarda lo que se quiere del dispositivo comunicar a los demas, en la transmicion tambien un bit de paridad del mensaque que me guarda la paridad que hay entre nombre del dispositivo y mensaje para comprobar si esta o no en correcto el mensaje y una variable que sea de bandera de final que es la que determina el fin del mensaje.
+toda transmicion de datos manda el nombre del dispositivo del que es envidado y al queva si es que se sabe aquien se manda, si estan sincronizados ya saben los nombres de todos los dispositivos y si no no podran mandar
+si despues de "tiempo_mensaje" que es otra variable para saber cuanto tiempo lleva resiviendo el mensaje, si este tiempo es mayor lo tomara como error y  transmitira un mensaje de error y dependiendo si tiene el nombre del dispositivo el cual fue mandado el mensaje.
