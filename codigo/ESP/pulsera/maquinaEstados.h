@@ -1,29 +1,36 @@
-#ifndef transmisiondatos_h
-#define transmisiondatos_h
-  switch (estado) {
-    case ENCENDIDO:
-      break;
-      
-    case  SINCRONIZANDO:
-      // Código para modo maestro
-      // ...
-      break;
+#ifndef maquinaEstados_h
+#define maquinaEstados_h
+  #include "transmisiondatos.h"
 
-    case  SINCRONIZANDO_ESCLAVO:
-      // Código para modo esclavo
-      // ...
-      break;
+  // Constantes de tiempo
+  #define tiempoParaEsclavo 3000 // Tiempo en milisegundos para entrar en modo esclavo
+  #define tiempoParaMaestro 6000 // Tiempo en milisegundos para entrar en modo maestro
+  #define tiempoParaApagado 9000 // Tiempo en milisegundos para apagar
 
-    case  SINCRONIZACION_maestro:
-      // Código para modo de sincronización
-      // ...
-      break;
-    
-    case transmiciondatos:
-      break;
+  extern unsigned long tiempoSincronizacion; // Tiempo en milisegundos para entrar en modo esclavo
+  extern bool encendidoSincronizacion;
+  extern bool esclavo;
+  extern char nombreDisp_conec[20];
+  extern char nombreDispositivo;
 
-    case apagado:
-      break;
-  }
+  #include "leds.h"
+  #include "boton.h"
+/*Maquina de estados*/
+  /*estructura*/
+    enum Estado
+    {
+      ENCENDIDO,
+      SINCRONIZANDO,
+      SINCRONIZANDO_ESCLAVO,
+      SINCRONIZACION_maestro,
+      transmiciondatos,
+      apagado
+    };
+    /*variable del estado*/
+  extern Estado estado;
 
+//cuenta y pasa a el modo esclavo si completa el tiempo adecuado
+void sincronizado();
+void sincronizadoEsclavo();
+void sincronizadoMaestro();
 #endif

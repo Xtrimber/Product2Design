@@ -1,19 +1,36 @@
 #include "leds.h"
 #include <Arduino.h>
 
-void encenderLED(int pin, int veces)
+void encenderLED(int pin, int tiempo)
 {
-  unsigned long tiempoActual = millis();
-  static unsigned long tiempoAnterior = 0;
-  static bool encendido = false;
-
-  if (tiempoActual - tiempoAnterior >= 1000)
+  if ((millis() - tiempoAnterior) >= tiempo)
   {
-    tiempoAnterior = tiempoActual;
+    tiempoAnterior = millis();
     encendido = !encendido;
     digitalWrite(pin, encendido ? HIGH : LOW);
-    veces--;
   }
+}
+
+void encenderLEDS(int tiempo, int i = 3)
+{
+  while(i > 0)
+  {
+    if ((millis() - tiempoAnterior) >= tiempo)
+    {
+      tiempoAnterior = millis();
+      encendido = !encendido;
+      digitalWrite(ledAlertaPin, encendido ? HIGH : LOW);
+      digitalWrite(ledSincronizacionPin, digitalRead(ledAlertaPin));
+      i = i-1;
+    }
+  }
+  
+}
+
+void LEDSoff()
+{
+  digitalWrite(ledAlertaPin, LOW);
+  digitalWrite(ledSincronizacionPin, LOW);
 }
 
 void declarar_leds()

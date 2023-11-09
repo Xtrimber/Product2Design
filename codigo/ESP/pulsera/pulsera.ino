@@ -1,41 +1,63 @@
 #include "transmisiondatos.h"
 #include "leds.h"
 #include "boton.h"
-#include "transmisiondatos.h"
 #include "maquinaEstados.h"
 
-RH_ASK rf_driver;
+//RH_ASK rf_driver;
 // Variables
-bool enModoSincronizacion = false;
+char re_nombreDispositivo = '0';
+char re_nombreDispositivoRemitente ='0';
+char re_mensaje[20];
+
 bool enModoMaestro = false;
 unsigned long ultimoTiempoBoton = 0;
 unsigned long inicioSincronizacion = 0;
-enum Estado { ENCENDIDO, SINCRONIZANDO, SINCRONIZANDO_ESCLAVO, SINCRONIZACION_maestro, transmiciondatos, apagado };
-Estado estado = ENCENDIDO;
 char nombreDispositivo = 'A'; // Nombre del dispositivo (cámbialo según sea necesario)
-char mensaje[20] = ""; // Mensaje a transmitir
 char banderaInicio = '#'; // Caracter de inicio de mensaje
 char banderaFinal = '$'; // Caracter de final de mensaje
+char nombreDisp_conec[20];
+unsigned long tiempoAnterior; // Tiempo en milisegundos para entrar en modo esclavo
+bool encendido = false;
 
-// Constantes de tiempo
-unsigned long tiempoParaEsclavo = 3000; // Tiempo en milisegundos para entrar en modo esclavo
-unsigned long tiempoParaMaestro = 6000; // Tiempo en milisegundos para entrar en modo maestro
-unsigned long tiempoParaApagado = 9000; // Tiempo en milisegundos para apagar
+unsigned long tiempoSincronizacion; // Tiempo en milisegundos para entrar en modo esclavo
+bool encendidoSincronizacion = false;
+bool esclavo = true;
+
+Estado estado;
 
 void setup()
 {
+  declaracion_transmisiondatos();
   declarar_leds();
-  if (!rf_driver.init())
-  {
-    Serial.println("RadioHead no se pudo inicializar.");
-  }
-  // Configura el pin de transmisión en el constructor
-  RH_ASK rf_driver(2000, 10); // Velocidad de transmisión (2000 bps), pin de transmisión (cambia el número según tu configuración)
-  pinMode(botonPin, INPUT_PULLUP);
+  pinMode(botonPin, INPUT);
 }
 
 
 void loop() {
-  unsigned long tiempoActual = millis();
-  void mian_maquinaEstados();
+  switch (estado) {
+
+    case ENCENDIDO:
+      encenderLEDS(1000, 3);
+      LEDSoff();
+      estado = SINCRONIZANDO;
+      break;
+      
+    case  SINCRONIZANDO:
+      sincronizado();
+      break;
+
+    case  SINCRONIZANDO_ESCLAVO:
+      sincronizadoEsclavo();
+      break;
+
+    case  SINCRONIZACION_maestro:
+      sincronizadoMaestro();
+      break;
+    
+    case transmiciondatos:
+      break;
+
+    case apagado:
+      break;
+  }
 }
