@@ -3,7 +3,8 @@
 #include "boton.h"
 #include "maquinaEstados.h"
 
-//RH_ASK rf_driver;
+RH_ASK rf_driver(2000, PIN_RECEIVE, PIN_TRANSMIT, 14, false);
+
 // Variables
 char re_nombreDispositivo = '0';
 char re_nombreDispositivoRemitente ='0';
@@ -27,6 +28,7 @@ Estado estado;
 
 void setup()
 {
+  Serial.begin(9600);
   declaracion_transmisiondatos();
   declarar_leds();
   pinMode(botonPin, INPUT);
@@ -34,7 +36,7 @@ void setup()
 
 
 void loop() {
-  switch (estado) {
+  /*switch (estado) {
 
     case ENCENDIDO:
       encenderLEDS(1000, 3);
@@ -59,5 +61,8 @@ void loop() {
 
     case apagado:
       break;
-  }
+  }*/
+
+  //prueva_tx_transmisiondatos("5 en melo");
+  //prueva_rx_transmisiondatos();
 }

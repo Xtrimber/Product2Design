@@ -8,25 +8,25 @@
 
  1) el boton en primera estancia espara encendido prendera un led y el otro en diferencia de 1 
 segundo entre uno y el otro, cuando esten encendido los dos titilearan los dos al mismo tiempo 
-asta que el usuario deje de precionar el boton [?]
+asta que el usuario deje de precionar el boton [ok]
 
 2) si se mantiene precionado "tiempoParaEsclavo"(variable de tiempo) cantidad de tiempo se pone 
-en modo sincronizado de esclavo y prende el led 1.[?]
+en modo sincronizado de esclavo y prende el led 1.[ok]
 
  3) si es presionado "tiempoParaMaestro"(variable de tiempo) cantidad de tiempo prende led 2 y 
 se pone listo para sincronizar en modo maestro una vez se pone en modo maestro siempre
-sincronizara en modo maestro independiente de el tiempo que sea seleccionado
+sincronizara en modo maestro independiente del tiempo que sea seleccionado [ok]
 
  4) si es presionado "tiempoParaApagado"(variable de tiempo) cantidad de tiempo el dispositivo 
 se apagara y antes de apagarse prendera y apagara los dos leds con una diferencia de 1 segundo 
-entre apagado y encendido, esto lo ara dos veces y despues se apagaran.
+entre apagado y encendido, esto lo ara dos veces y despues se apagaran. [ok]
 
  5) la manera de salir del modo sincronizar del maestro ocurrira cuando el usuario oprima el boton 
-"tiempoParaMaestro" cantidad de tiempo el dispositivo.
+"tiempoParaMaestro" cantidad de tiempo el dispositivo. [ok]
 
  6) la manera en que dejara de estar en modo sincronizar esclavo el dispositivo sera cuando resiva
-señal de respuesta del maestrode que ya fue sincronizado y el led 1 comensara a titilear 4 veces
-en intervalos de 1 segundo y despues se apagara
+señal de respuesta del maestro de que ya fue sincronizado y el led 1 comensara a titilear 4 veces
+en intervalos de 1 segundo y despues se apagara [ok]
 
 	- trasmicion de datos:
 

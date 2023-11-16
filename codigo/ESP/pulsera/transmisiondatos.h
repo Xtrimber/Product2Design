@@ -1,5 +1,9 @@
 #ifndef transmisiondatos_h
 #define transmisiondatos_h
+
+  #include <RH_ASK.h>//con libreria RadioHead
+  #include <SPI.h>
+
   extern char banderaInicio;
   extern char banderaFinal;
 
@@ -7,14 +11,11 @@
   extern char re_nombreDispositivoRemitente;
   extern char re_mensaje[20];
 
-  #define PIN_TRANSMIT 12 // Cambia 12 al número de pin que desees para la transmisión
-  #define PIN_RECEIVE 11  // Cambia 11 al número de pin que desees para la recepción
+  #define PIN_TRANSMIT 2 // Cambia 12 al número de pin que desees para la transmisión
+  #define PIN_RECEIVE 4  // Cambia 11 al número de pin que desees para la recepción
 
-  #include <VirtualWire.h>
-
-/*#include <RH_ASK.h>//RadioHead
-#include <SPI.h>
-extern RH_ASK rf_driver;*/
+// speed = 2000, uint8_t rxPin = 11, uint8_t txPin = 12
+extern RH_ASK rf_driver;
 
   void declaracion_transmisiondatos();
 
@@ -34,5 +35,9 @@ extern RH_ASK rf_driver;*/
   /*recibe los datos de parte de algun dispositivo*/
   //resive y guarda los datos en un 
   void recibirMensaje();
+
+  void prueva_tx_transmisiondatos(char *mensaje);
+
+  void prueva_rx_transmisiondatos();
 
 #endif
