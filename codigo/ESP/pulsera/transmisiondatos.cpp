@@ -20,7 +20,9 @@ void transmitirMensaje(const char* mensaje)
 }
 
 void crearMensaje(char banderaInicio, char nombreDispositivo, char nombreDispositivoRemitente, const char* mensaje, char banderaFinal) {
+  
   char mensajeCompleto[30]; // Ajusta el tamaño según tus necesidades
+  memset(mensajeCompleto, 0, sizeof(mensajeCompleto));//reinicia
   
   // Construye el mensaje completo
   sprintf(mensajeCompleto, "%c%c%c%s%c", banderaInicio, nombreDispositivo, nombreDispositivoRemitente, mensaje, banderaFinal);
@@ -39,42 +41,88 @@ void crearMensaje(char banderaInicio, char nombreDispositivo, char nombreDisposi
   transmitirMensaje(mensajeCompleto);
 }
 
-void recibirMensaje()
-{
+void recibirMensaje(char retona = '0') {
   uint8_t buf[RH_ASK_MAX_MESSAGE_LEN];
   uint8_t buflen = sizeof(buf);
-
   memset(buf, 0, sizeof(buf));
 
+  // Paso 1: Recibir el mensaje desde el módulo RF
   if (rf_driver.recv(buf, &buflen)) {
-    buf[buflen] = '\0'; // Añade un carácter nulo al final para convertirlo en una cadena
+    // Paso 2: Convierte el búfer en una cadena de caracteres antes de procesar
+    char mensajeStr[RH_ASK_MAX_MESSAGE_LEN];
+    strncpy(mensajeStr, (char*)buf, buflen);
+    mensajeStr[buflen] = '\0';
 
-    // Verifica si el mensaje contiene las banderas
-    char* inicio = strchr((char*)buf, banderaInicio);
-    char* final = strchr((char*)buf, banderaFinal);
+    // Variables para almacenar los componentes del mensaje
+    char re_banderaInicio;
+    extern char nombreDispositivo;
+    extern char re_nombreDispositivo;
+    extern char re_nombreDispositivoRemitente;
+    extern char re_mensaje[20]; // Ajusta el tamaño según tus necesidades
+    char re_banderaFinal;
+    char bitDeParidadRecibido;
+    extern bool recivido;
+    memset(re_mensaje, 0, sizeof(re_mensaje));
 
-    if (inicio != NULL && final != NULL) {
-      // Calcula la longitud del mensaje sin las banderas
-      size_t longitudMensaje = final - inicio - 1;
+    // Paso 3: Separar el mensaje en componentes
+    sscanf(mensajeStr, "%c%c%c%19[^$]%c%c", &re_banderaInicio, &re_nombreDispositivo, &re_nombreDispositivoRemitente, re_mensaje, &re_banderaFinal, &bitDeParidadRecibido);
 
-      // Verifica el bit de paridad (XOR de todos los caracteres)
-      char bitDeParidad = buf[0];
-      for (size_t i = 1; i < longitudMensaje; i++) {
-        bitDeParidad ^= buf[i];
+        
+    // Paso 4: Verificar las banderas de inicio y final
+    if (banderaInicio == re_banderaInicio && banderaFinal == re_banderaFinal) {
+      Serial.println("Correctas banderas de inicio y/o final");
+        /*Serial.println(mensajeStr);
+        Serial.print("banderaInicio: ");
+        Serial.println(re_banderaInicio);
+        Serial.print("Nombre Dispositivo: ");
+        Serial.println(re_nombreDispositivo);
+        Serial.print("Nombre Dispositivo Remitente: ");
+        Serial.println(re_nombreDispositivoRemitente);
+        Serial.print("Mensaje: ");
+        Serial.println(re_mensaje);
+        Serial.print("banderaFinal: ");
+        Serial.println(re_banderaFinal);
+        Serial.print("bitDeParidadRecibido: ");
+        Serial.println(bitDeParidadRecibido);
+        Serial.println(" ");*/
+
+      // Paso 5: Realizar el cálculo del bit de paridad
+      char mensajeCompleto[30]; // Ajusta el tamaño según tus necesidades
+      memset(mensajeCompleto, 0, sizeof(mensajeCompleto));//reinicia
+      sprintf(mensajeCompleto, "%c%c%c%s%c", re_banderaInicio, re_nombreDispositivo, re_nombreDispositivoRemitente, re_mensaje, re_banderaFinal);
+
+      char bitDeParidadCalculado = mensajeCompleto[0];
+      for (int i = 1; mensajeCompleto[i] != '\0'; i++) {
+        bitDeParidadCalculado ^= mensajeCompleto[i];
       }
 
-      if (bitDeParidad == buf[longitudMensaje]) {
-        // Bit de paridad correcto, desglosa los datos
-        re_nombreDispositivo = buf[1];
-        re_nombreDispositivoRemitente = buf[2];
-        re_mensaje[20];
-        strncpy(re_mensaje, (char*)inicio + 1, longitudMensaje - 2);
-        re_mensaje[longitudMensaje - 2] = '\0';
+      /*Serial.print("calculado: ");
+      Serial.println(bitDeParidadCalculado);
+      Serial.print("recivido: ");
+      Serial.println(bitDeParidadRecibido);*/
+
+      // Paso 6: Verificar el bit de paridad
+      if (bitDeParidadRecibido == bitDeParidadCalculado) {
+        // El bit de paridad es correcto, puedes utilizar los componentes del mensaje
+        Serial.println("Bit de paridad correcto");
+        /*Serial.print("Nombre Dispositivo: ");
+        Serial.println(re_nombreDispositivo);
+        Serial.print("Nombre Dispositivo Remitente: ");
+        Serial.println(re_nombreDispositivoRemitente);
+        Serial.print("Mensaje: ");
+        Serial.println(re_mensaje);*/
+        recivido = true;
+      } else {
+        // Error en el bit de paridad
+        Serial.println("Error en el bit de paridad");
+        crearMensaje(banderaInicio, nombreDispositivo , retona, "error", banderaFinal);
+        recivido = false;
       }
-      else
-      {
-        crearMensaje(banderaInicio, '0', '0', "error", banderaFinal);
-      }
+    } else {
+      // Banderas incorrectas
+      crearMensaje(banderaInicio, nombreDispositivo , retona, "error", banderaFinal);
+      Serial.println("Error en las banderas de inicio y/o final");
+      recivido = false;
     }
   }
 }
@@ -94,11 +142,61 @@ void prueva_rx_transmisiondatos()
   // Recepción
   uint8_t buf[RH_ASK_MAX_MESSAGE_LEN];
   uint8_t buflen = sizeof(buf);
-  memset(buf, 0, sizeof(buf));
+  memset(buf, 0, sizeof(buf));//reinicia la memoria del mensaje
   if (rf_driver.recv(buf, &buflen))
   {
     Serial.print("Mensaje recibido: ");
     Serial.println((char *)buf);
   }
   delay(1000);
+}
+
+void prueva_conectividad_transmisiondatos(int x) {
+  extern char nombreDispositivo;
+  extern char banderaInicio;
+  extern char banderaFinal;
+
+  switch (x) {
+
+    case 1:
+    {
+      crearMensaje(banderaInicio, nombreDispositivo, '0', "conectar", banderaFinal);
+      extern bool recivido;
+      int conteo = 0;
+      recivido = true;
+      Serial.print("Conectando");
+      while (recivido) {
+        conteo = conteo + 1;
+        Serial.print(".");
+        delay(50);
+        if (conteo == 30) {
+          recivido = false;
+          Serial.println(" ");
+        }
+
+        recibirMensaje();
+        if (!strcmp(re_mensaje, "conectado")) {
+          Serial.println("Conectado con éxito");
+          crearMensaje(banderaInicio, nombreDispositivo, '0', "confirmado", banderaFinal);
+        }
+      }
+    }
+    break;
+
+    case 2:
+    {
+      Serial.println("Enviando solicitud de conexión");
+      recibirMensaje();
+      bool conectado = false;
+      while (!strcmp(re_mensaje, "conectar") || !conectado) {
+        conectado = true;
+        Serial.println("Se envió señal para conectar");
+        crearMensaje(banderaInicio, nombreDispositivo, '0', "conectado", banderaFinal);
+        if (!strcmp(re_mensaje, "confirmado")) {
+          Serial.println("Conectados");
+        }
+      }
+    }
+    break;
+  }
 }

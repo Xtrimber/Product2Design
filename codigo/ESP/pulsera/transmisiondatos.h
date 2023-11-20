@@ -34,10 +34,17 @@ extern RH_ASK rf_driver;
 
   /*recibe los datos de parte de algun dispositivo*/
   //resive y guarda los datos en un 
-  void recibirMensaje();
+  void recibirMensaje(char retona = '0');
 
+  //transmite lo que quiera que este dentro la funcion
   void prueva_tx_transmisiondatos(char *mensaje);
 
+  //recive y imprime lo que llege del sensor 433mhz y lo imprime en la consola
   void prueva_rx_transmisiondatos();
+
+  /*tiene dos casos*/
+  /*caso 1: manda señal para conectarse y espera respuesta*/
+  /*caso 2: recive la señal del otro dispocitivo y emite para conestar*/
+  void prueva_conectividad_transmisiondatos(int estado);
 
 #endif

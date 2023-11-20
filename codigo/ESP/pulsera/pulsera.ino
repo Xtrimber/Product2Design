@@ -19,6 +19,7 @@ char banderaFinal = '$'; // Caracter de final de mensaje
 char nombreDisp_conec[20];
 unsigned long tiempoAnterior; // Tiempo en milisegundos para entrar en modo esclavo
 bool encendido = false;
+bool recivido = false;
 
 unsigned long tiempoSincronizacion; // Tiempo en milisegundos para entrar en modo esclavo
 bool encendidoSincronizacion = false;
@@ -62,7 +63,10 @@ void loop() {
     case apagado:
       break;
   }*/
-
-  //prueva_tx_transmisiondatos("5 en melo");
+  //nombreDisp_conec[0]='B';
+  //crearMensaje(banderaInicio, nombreDispositivo , nombreDisp_conec[0], " se acabo todo se", banderaFinal);
+  //recibirMensaje();
+  //prueva_tx_transmisiondatos("mueste del dios de la luna y el mar");
   //prueva_rx_transmisiondatos();
+  prueva_conectividad_transmisiondatos(1);
 }
