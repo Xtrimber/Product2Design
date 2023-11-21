@@ -13,6 +13,7 @@ void encenderLED(int pin, int tiempo)
 
 void encenderLEDS(int tiempo, int i = 3)
 {
+  i = i * 2;
   while(i > 0)
   {
     if ((millis() - tiempoAnterior) >= tiempo)
@@ -20,7 +21,7 @@ void encenderLEDS(int tiempo, int i = 3)
       tiempoAnterior = millis();
       encendido = !encendido;
       digitalWrite(ledAlertaPin, encendido ? HIGH : LOW);
-      digitalWrite(ledSincronizacionPin, digitalRead(ledAlertaPin));
+      digitalWrite(ledSincronizacionPin, encendido ? HIGH : LOW);
       i = i-1;
     }
   }

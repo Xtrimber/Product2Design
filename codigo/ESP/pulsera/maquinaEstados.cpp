@@ -4,7 +4,7 @@
 void sincronizado()
   {
     tiempoSincronizacion = millis();
-    while((digitalRead(botonPin)==1) && (encendidoSincronizacion == false))
+    while((digitalRead(botonPin)==0) && (encendidoSincronizacion == false))
     {
       if((millis() - tiempoSincronizacion) >= tiempoParaEsclavo)
       {
@@ -14,13 +14,12 @@ void sincronizado()
     }
   }
 
-
 void sincronizadoEsclavo()
   {
     //mientras seleccione el boton la cantidad de tiempo adecuada se mantrendra en esclavo, sino lo manda a maestro
-    while((digitalRead(botonPin)==1) && (encendidoSincronizacion == true))
+    while((digitalRead(botonPin)==0) && (encendidoSincronizacion == true))
     {
-      encenderLED(ledSincronizacionPin, 500);
+      digitalWrite(ledSincronizacionPin, HIGH);
       if(((millis() - tiempoSincronizacion) >= tiempoParaMaestro))
       {
         estado = SINCRONIZACION_maestro;
@@ -28,95 +27,148 @@ void sincronizadoEsclavo()
         encendidoSincronizacion = false;
         LEDSoff();
       }
-      estado = transmiciondatos;
+      else
+      {  
+        estado = transmiciondatos;
+      }
     }
+    LEDSoff();
     //sincronisacion con maestro
-    while((encendidoSincronizacion == false) && (esclavo = true))
+    while((encendidoSincronizacion == true) && (esclavo = true))
     {
       encenderLED(ledSincronizacionPin, 500);
       bool conectado=false;
       //envia mensaje para conectar
       crearMensaje(banderaInicio, '0', nombreDispositivo, "conectar", banderaFinal);
+      tiempoSincronizacion=millis();//reinicia el tiempo para volver a mandar mensaje
       //mantiene aqui asata resivir respuesta
-      tiempoSincronizacion=millis();
+      conectado = true;
       while(conectado==true)
       {
         encenderLED(ledSincronizacionPin, 500);
         recibirMensaje();
         //si recive respuesta del maestro por su nombre sale de esperar respuesta 
-        if((re_mensaje[20] == "conectado") && (re_nombreDispositivo == nombreDispositivo))
+        if((strcmp(re_mensaje, "conectado") == 0) && (strcmp(re_nombreDispositivo, nombreDispositivo)==0))
         {
-          estado = transmiciondatos;
-          nombreDisp_conec[0] = re_nombreDispositivoRemitente;
           conectado=false;
-          encendidoSincronizacion=true;
-          encenderLEDS(500, 8);
+          encendidoSincronizacion=false;
+          estado = transmiciondatos;
+          LEDSoff();
+          nombreDisp_conec[0] = re_nombreDispositivoRemitente;
           crearMensaje(banderaInicio, nombreDisp_conec[0], nombreDispositivo, "confirmado", banderaFinal);
+          encenderLEDS(500, 2);
         }
         //si recive error de parte del maestro remite para volver a mandar señal
-        else if((re_mensaje[20] == "error") || ((millis() - tiempoSincronizacion) >= 500))
+        else if((millis() - tiempoSincronizacion) >= 500)
         {
           conectado=false;
+        }
+        tiempoAnterior = millis();
+        while(digitalRead(botonPin) == 0)
+        {
+          
+          if((millis() - tiempoAnterior) >= 1000)
+          {
+            conectado = false;
+            encendidoSincronizacion = false;
+            estado = apagado;
+          }
         }
       }
     }
-     LEDSoff();
+    LEDSoff();
   }
+
 void sincronizadoMaestro()
   {
     LEDSoff();
+    enModoMaestro = true;
+    digitalWrite(ledAlertaPin, HIGH);
     //si mantiene el boton oprimido lo manda a apagar
-    while((digitalRead(botonPin)==1) && (encendidoSincronizacion == false))
+    while((digitalRead(botonPin) == 0) && (encendidoSincronizacion == false))
     {
-      encenderLED(ledAlertaPin, 500);
       //mada a apagar si se supera el tiempo
       if((millis() - tiempoSincronizacion) >= tiempoParaApagado)
       {
         estado = apagado;
         encendidoSincronizacion = true;
+        enModoMaestro = false;
         LEDSoff();
       }
       // sale para iniciar sincronizacion
       else 
       {
+        enModoMaestro = true;
         estado = transmiciondatos;
-        encendidoSincronizacion = false;
       }
     }
+    LEDSoff();
     //inicio de sincronizacion para maestro
-    while(encendidoSincronizacion == true)
+    while(encendidoSincronizacion == false)
     {
-      char puesto = 0;
-      bool conectado=false;
-      encenderLED(ledAlertaPin, 500);
-      //para esperar mensaje de sincronizacion
-      while(conectado==false)
+      bool con=true;
+      while(con ==true)
       {
         encenderLED(ledAlertaPin, 500);
         recibirMensaje();
+        Serial.println("esperando para conectar");
         //si recive mensaje de sincronizacion y no tienen a quien se envia
         //guarda el remitente y espera otro para conectar
-        if((re_mensaje[20] == "conectar") && (re_nombreDispositivo == '0'))
-        {
-          estado = transmiciondatos;
+        tiempoSincronizacion = millis();
+        while(strcmp(re_mensaje, "conectar") == 0)
+        { 
           nombreDisp_conec[puesto] = re_nombreDispositivoRemitente;
           crearMensaje(banderaInicio, nombreDisp_conec[puesto], nombreDispositivo, "conectado", banderaFinal);
-          puesto = puesto +1;
+          Serial.println((millis() - tiempoSincronizacion));
+          if((millis() - tiempoSincronizacion) >= 3000)
+          {
+            recibirMensaje();
+            memset(re_mensaje, 0, sizeof(re_mensaje));
+            con = false;
+          }
+          recibirMensaje();
+          
         }
         tiempoSincronizacion = millis();
         //si se preciona el boton misma cantidad de tiempo permite salir del modo maestro
-        while(digitalRead(botonPin)==1)
+        while(digitalRead(botonPin)==0)
+          {
+            if((millis() - tiempoSincronizacion) >= 1000)
+            {
+              encenderLEDS(500, 8);
+              LEDSoff();
+              encendidoSincronizacion = true;
+              estado = transmiciondatos;
+              con=false;
+            }
+          }
+      }
+      encenderLED(ledAlertaPin, 500);
+      estado = transmiciondatos;
+      if(puesto < 9)
+      {
+        Serial.print("suma 1");
+        puesto = puesto + 1;
+      }
+      else
+      {
+        encenderLEDS(500, 8);
+        LEDSoff();
+        encendidoSincronizacion = true;
+      }
+      tiempoSincronizacion = millis();
+      //si se preciona el boton misma cantidad de tiempo permite salir del modo maestro
+      while(digitalRead(botonPin)==0)
         {
-          if((millis() - tiempoSincronizacion) >= tiempoParaMaestro)
+          if((millis() - tiempoSincronizacion) >= 1000)
           {
             encenderLEDS(500, 8);
             LEDSoff();
-            encendidoSincronizacion = false;
-            conectado = true;
-            break;
+            con=false;
+            encendidoSincronizacion = true;
+            estado = transmiciondatos;
           }
         }
       }
-    }
-     LEDSoff();
+    LEDSoff();
   }

@@ -1,8 +1,8 @@
 #ifndef lends_h
 #define lends_h
 
-  #define ledAlertaPin 2
-  #define ledSincronizacionPin 3
+  #define ledAlertaPin 12
+  #define ledSincronizacionPin 11
 
   extern unsigned long tiempoAnterior;
   extern bool encendido;

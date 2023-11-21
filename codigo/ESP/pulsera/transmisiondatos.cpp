@@ -175,7 +175,7 @@ void prueva_conectividad_transmisiondatos(int x) {
         }
 
         recibirMensaje();
-        if (!strcmp(re_mensaje, "conectado")) {
+        while(strcmp(re_mensaje, "conectado")) {
           Serial.println("Conectado con éxito");
           crearMensaje(banderaInicio, nombreDispositivo, '0', "confirmado", banderaFinal);
         }
@@ -188,12 +188,15 @@ void prueva_conectividad_transmisiondatos(int x) {
       Serial.println("Enviando solicitud de conexión");
       recibirMensaje();
       bool conectado = false;
-      while (!strcmp(re_mensaje, "conectar") || !conectado) {
+      while (strcmp(re_mensaje, "conectar") || conectado == true)
+      {
         conectado = true;
         Serial.println("Se envió señal para conectar");
         crearMensaje(banderaInicio, nombreDispositivo, '0', "conectado", banderaFinal);
-        if (!strcmp(re_mensaje, "confirmado")) {
+        recibirMensaje();
+        while(strcmp(re_mensaje, "confirmado")) {
           Serial.println("Conectados");
+          delay(1000);
         }
       }
     }

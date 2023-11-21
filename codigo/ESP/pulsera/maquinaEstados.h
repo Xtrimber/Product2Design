@@ -8,10 +8,13 @@
   #define tiempoParaApagado 9000 // Tiempo en milisegundos para apagar
 
   extern unsigned long tiempoSincronizacion; // Tiempo en milisegundos para entrar en modo esclavo
+  extern unsigned long tiempoAnterior;
   extern bool encendidoSincronizacion;
   extern bool esclavo;
   extern char nombreDisp_conec[20];
   extern char nombreDispositivo;
+  extern bool enModoMaestro;
+  extern char puesto;
 
   #include "leds.h"
   #include "boton.h"
