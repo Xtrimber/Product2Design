@@ -2,9 +2,11 @@
 #include <Arduino.h>
 #include "leds.h"
 
+
 void declarar_boton()
 {
   pinMode(botonPin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(botonPin), manejoInterrupcion_boton, LOW);
 }
 
 void prueva_boton()
@@ -27,4 +29,7 @@ void prueva_boton()
     digitalWrite(ledSincronizacionPin, LOW);
     delay(1000);
   }
+}
+void manejoInterrupcion_boton() {
+  flagInterrupcion = true;
 }

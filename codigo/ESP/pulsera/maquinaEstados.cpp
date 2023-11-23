@@ -10,6 +10,7 @@ void sincronizado()
       {
         estado = SINCRONIZANDO_ESCLAVO;
         encendidoSincronizacion = true;
+        flagInterrupcion = false;
       }
     }
   }
@@ -25,10 +26,12 @@ void sincronizadoEsclavo()
         estado = SINCRONIZACION_maestro;
         esclavo = false;
         encendidoSincronizacion = false;
+        flagInterrupcion = false;
         LEDSoff();
       }
       else
-      {  
+      {
+        flagInterrupcion = false;
         estado = transmiciondatos;
       }
     }
@@ -69,6 +72,7 @@ void sincronizadoEsclavo()
           
           if((millis() - tiempoAnterior) >= 1000)
           {
+            flagInterrupcion = false;
             conectado = false;
             encendidoSincronizacion = false;
             estado = apagado;
@@ -90,6 +94,7 @@ void sincronizadoMaestro()
       //mada a apagar si se supera el tiempo
       if((millis() - tiempoSincronizacion) >= tiempoParaApagado)
       {
+        flagInterrupcion = false;
         estado = apagado;
         encendidoSincronizacion = true;
         enModoMaestro = false;
@@ -104,6 +109,7 @@ void sincronizadoMaestro()
     }
     LEDSoff();
     //inicio de sincronizacion para maestro
+    int posicion = 0;
     while(encendidoSincronizacion == false)
     {
       bool con=true;
@@ -117,8 +123,8 @@ void sincronizadoMaestro()
         tiempoSincronizacion = millis();
         while(strcmp(re_mensaje, "conectar") == 0)
         { 
-          nombreDisp_conec[puesto] = re_nombreDispositivoRemitente;
-          crearMensaje(banderaInicio, nombreDisp_conec[puesto], nombreDispositivo, "conectado", banderaFinal);
+          nombreDisp_conec[posicion] = re_nombreDispositivoRemitente;
+          crearMensaje(banderaInicio, nombreDisp_conec[posicion], nombreDispositivo, "conectado", banderaFinal);
           Serial.println((millis() - tiempoSincronizacion));
           if((millis() - tiempoSincronizacion) >= 3000)
           {
@@ -135,6 +141,7 @@ void sincronizadoMaestro()
           {
             if((millis() - tiempoSincronizacion) >= 1000)
             {
+              flagInterrupcion = false;
               encenderLEDS(500, 8);
               LEDSoff();
               encendidoSincronizacion = true;
@@ -145,10 +152,12 @@ void sincronizadoMaestro()
       }
       encenderLED(ledAlertaPin, 500);
       estado = transmiciondatos;
-      if(puesto < 9)
+      if(posicion < 9)
       {
-        Serial.print("suma 1");
-        puesto = puesto + 1;
+        memset(re_mensaje, 0, sizeof(re_mensaje));
+        Serial.print("suma 1: ");
+        Serial.println(posicion);
+        posicion = posicion + 1;
       }
       else
       {
@@ -162,11 +171,16 @@ void sincronizadoMaestro()
         {
           if((millis() - tiempoSincronizacion) >= 1000)
           {
+            flagInterrupcion = false;
             encenderLEDS(500, 8);
             LEDSoff();
             con=false;
             encendidoSincronizacion = true;
             estado = transmiciondatos;
+            Serial.print("puestos: ");
+            puesto = posicion-1;
+            Serial.println(puesto);
+            
           }
         }
       }
